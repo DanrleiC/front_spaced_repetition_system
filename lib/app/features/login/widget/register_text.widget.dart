@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
 class RegisterText extends StatelessWidget {
-  const RegisterText({super.key});
+  final VoidCallback onPressed;
+
+  const RegisterText({
+    required this.onPressed,
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class RegisterText extends StatelessWidget {
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: GestureDetector(
-              onTap: null,
+              onTap: onPressed,
               child: Text(
                 'Cadastre-se',
                 style: TextStyle(

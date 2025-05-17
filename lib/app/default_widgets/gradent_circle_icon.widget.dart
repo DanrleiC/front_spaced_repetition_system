@@ -3,7 +3,7 @@ import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
 class GradientCircleIcon extends StatelessWidget {
   final double size;
-  final String assetPath; // Caminho da imagem ou SVG
+  final String assetPath;
   final double iconSize;
 
   const GradientCircleIcon({
