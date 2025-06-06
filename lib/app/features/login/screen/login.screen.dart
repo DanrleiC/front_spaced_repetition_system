@@ -8,6 +8,7 @@ import 'package:front_spaced_repetition_system/app/features/login/widget/gradien
 import 'package:front_spaced_repetition_system/app/features/login/widget/register_text.widget.dart';
 import 'package:front_spaced_repetition_system/app/default_widgets/message.widget.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
+import 'package:front_spaced_repetition_system/app/utils/routes.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -26,7 +27,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final email = _emailController.text.trim();
       final password = _passwordController.text;
 
-      await ref.read(loginControllerProvider.notifier).login(email: email, password: password);
+      await ref.read(loginControllerProvider.notifier).login(context: context, email: email, password: password);
     }
   }
 
@@ -81,7 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const SizedBox(height: 10),
                     Divider(color: ColorsApp.labelField, thickness: 0.2),
                     const SizedBox(height: 10),
-                    RegisterText(onPressed: () => Navigator.popAndPushNamed(context, '/usrCreation'))
+                    RegisterText(onPressed: () => Navigator.popAndPushNamed(context, AppRoutes.usrCreation))
                   ],
                 ),
               ),

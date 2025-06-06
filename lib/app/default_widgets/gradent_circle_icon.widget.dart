@@ -5,12 +5,14 @@ class GradientCircleIcon extends StatelessWidget {
   final double size;
   final String assetPath;
   final double iconSize;
+  final double borderRadius;
 
   const GradientCircleIcon({
     super.key,
     required this.assetPath,
     this.size = 60.0,
     this.iconSize = 30.0,
+    this.borderRadius = 100.0,
   });
 
   @override
@@ -18,8 +20,8 @@ class GradientCircleIcon extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(borderRadius),
         gradient: LinearGradient(
           colors: [
             ColorsApp.mainPurple,

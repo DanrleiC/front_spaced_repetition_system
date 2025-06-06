@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorsApp {
 
+  static const freedom          = Color(0xFFFFFFFF);
   static const background       = Color(0xFF171E29);
   static const labelField       = Color(0xFFA0A8B4);
   static const mainPurple       = Color(0xFF7c6ffc);

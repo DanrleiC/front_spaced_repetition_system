@@ -1,77 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:front_spaced_repetition_system/app/default_widgets/gradent_circle_icon.widget.dart';
+import 'package:front_spaced_repetition_system/app/features/homepage/provider/bottombar.provider.dart';
+import 'package:front_spaced_repetition_system/app/features/homepage/widgets/deck_card.widget.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
-class HomePageScreen extends StatefulWidget {
+import '../widgets/fab.widget.dart';
+
+class HomePageScreen extends ConsumerWidget {
   const HomePageScreen({super.key});
 
   @override
-  State<HomePageScreen> createState() => _HomePageScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedIndex = ref.watch(selectedIndexProvider);
 
-class _HomePageScreenState extends State<HomePageScreen> {
-  int _selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
+      body: content(),
       backgroundColor: ColorsApp.background,
-      bottomNavigationBar: bottomAppBar(),
-      floatingActionButton: floatingActionButton(),
+      bottomNavigationBar: bottombar(ref: ref, selectedIndex: selectedIndex),
+      floatingActionButton: const CustomFloatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
-  Widget bottomAppBar() {
-    return BottomNavigationBar(
-      backgroundColor: ColorsApp.cardBackgound,
-      currentIndex: _selectedIndex,
-      onTap: (index) => setState(() => _selectedIndex = index),
-      selectedItemColor: ColorsApp.mainPurple,
-      unselectedItemColor: ColorsApp.fieldBackground,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(FontAwesomeIcons.house),
-          label: 'house',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(FontAwesomeIcons.bars),
-          label: 'bars',
-        ),
-      ],
+  Widget content() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Wrap(
+        children: [
+          DeckCard(
+            title: 'Tittle',
+            description: 'desc',
+          )
+        ],
+      ),
     );
   }
 
-  Widget floatingActionButton() {
-    return FloatingActionButton(
-      onPressed: () {},
-      backgroundColor: Colors.transparent,
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Ink(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              ColorsApp.mainPurple,
-              ColorsApp.mainMagent,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(15),
+  Widget bottombar({required int selectedIndex, required WidgetRef ref}) {
+    return BottomNavigationBar(
+      backgroundColor: ColorsApp.cardBackgound,
+      currentIndex: selectedIndex,
+      onTap: (index) => ref.read(selectedIndexProvider.notifier).state = index,
+      selectedItemColor: ColorsApp.mainPurple,
+      unselectedItemColor: ColorsApp.fieldBackground,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.house),
+          label: 'Home',
         ),
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          alignment: Alignment.center,
-          child: Icon(
-            FontAwesomeIcons.plus,
-            color: Colors.white,
-          ),
+        BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.bars),
+          label: 'Menu',
         ),
-      ),
+      ],
     );
   }
 }
