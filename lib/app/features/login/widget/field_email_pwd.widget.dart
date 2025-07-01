@@ -76,9 +76,6 @@ class _FieldEmailPwdState extends State<FieldEmailPwd> {
             if (value == null || value.isEmpty) {
               return 'Por favor, insira a senha';
             }
-            if (value.length < 6) {
-              return 'A senha deve ter pelo menos 6 caracteres';
-            }
             return null;
           },
           suffixIcon: IconButton(
