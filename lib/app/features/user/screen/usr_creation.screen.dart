@@ -20,7 +20,7 @@ class _UserCreationScreenState extends ConsumerState<UserCreationScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _creation() async {
+  Future<void> _creation() async {
     if (_formKey.currentState!.validate()) {
       final name = _nameController.text;
       final email = _emailController.text.trim();

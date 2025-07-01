@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:front_spaced_repetition_system/app/features/login/provider/login.provider.dart';
+import 'package:front_spaced_repetition_system/app/features/login/controller/login.controller.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
 class GradientButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final Future<void> Function()? onPressed;
   final String text;
   final double borderRadius;
   final double minWidth;
