@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:front_spaced_repetition_system/app/default_widgets/gradent_circle_icon.widget.dart';
 import 'package:front_spaced_repetition_system/app/features/homepage/provider/bottombar.provider.dart';
 import 'package:front_spaced_repetition_system/app/features/homepage/widgets/deck_card.widget.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
