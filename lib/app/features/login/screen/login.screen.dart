@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:front_spaced_repetition_system/app/features/login/provider/login.provider.dart';
+
+import 'package:front_spaced_repetition_system/app/default_widgets/gradent_circle_icon.widget.dart';
+import 'package:front_spaced_repetition_system/app/default_widgets/message.widget.dart';
+import 'package:front_spaced_repetition_system/app/features/login/controller/login.controller.dart';
 import 'package:front_spaced_repetition_system/app/features/login/widget/field_email_pwd.widget.dart';
 import 'package:front_spaced_repetition_system/app/features/login/widget/forgot_pwd.widget.dart';
-import 'package:front_spaced_repetition_system/app/default_widgets/gradent_circle_icon.widget.dart';
 import 'package:front_spaced_repetition_system/app/features/login/widget/gradient_button.widget.dart';
 import 'package:front_spaced_repetition_system/app/features/login/widget/register_text.widget.dart';
-import 'package:front_spaced_repetition_system/app/default_widgets/message.widget.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 import 'package:front_spaced_repetition_system/app/utils/routes.dart';
 
@@ -22,29 +23,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _login() async {
-    if (_formKey.currentState!.validate()) {
-      final email = _emailController.text.trim();
-      final password = _passwordController.text;
-
-      await ref.read(loginControllerProvider.notifier).login(context: context, email: email, password: password);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<void>>(loginControllerProvider, (previous, next) {
-      next.whenOrNull(
-        data: (_) {
-          // Navigator.pushNamed(context, '/home');
-        },
-        error: (error, _) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error.toString())),
-          );
-        },
-      );
-    });
+    final controller = ref.watch(loginControllerProvider.notifier);
+    final state = ref.watch(loginControllerProvider);
 
     return Scaffold(
       backgroundColor: ColorsApp.background,
@@ -76,7 +58,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       passwordController: _passwordController,
                     ),
                     const SizedBox(height: 20),
-                    GradientButton(onPressed: _login, text: 'Entrar'),
+                    GradientButton(
+                      onPressed: state.isLoading
+                        ? null
+                        : () async {
+                            await controller.login(
+                              context: context,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            );
+                          },
+                        text: 'Entrar',
+                      ), 
                     const SizedBox(height: 20),
                     ForgotPasswordText(),
                     const SizedBox(height: 10),
