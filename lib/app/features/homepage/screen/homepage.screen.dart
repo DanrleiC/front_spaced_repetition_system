@@ -27,7 +27,7 @@ class HomePageScreen extends ConsumerWidget {
           runSpacing: 16,
           children: decks.map((deck) {
             return SizedBox(
-              width: 200, // ou outro valor que funcione bem no seu layout
+              width: 500,
               child: DeckCard(
                 title: deck.name,
                 description: deck.description,
