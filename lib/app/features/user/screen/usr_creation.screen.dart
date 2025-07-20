@@ -4,7 +4,7 @@ import 'package:front_spaced_repetition_system/app/default_widgets/default_field
 import 'package:front_spaced_repetition_system/app/default_widgets/gradent_circle_icon.widget.dart';
 import 'package:front_spaced_repetition_system/app/features/login/widget/gradient_button.widget.dart';
 import 'package:front_spaced_repetition_system/app/default_widgets/message.widget.dart';
-import 'package:front_spaced_repetition_system/app/features/user/provider/user.provider.dart';
+import 'package:front_spaced_repetition_system/app/features/user/controller/user.controller.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
 class UserCreationScreen extends ConsumerStatefulWidget {
@@ -26,25 +26,12 @@ class _UserCreationScreenState extends ConsumerState<UserCreationScreen> {
       final email = _emailController.text.trim();
       final password = _passwordController.text;
 
-      await ref.read(userControllerProvider.notifier).creationUsr(name: name, email: email, password: password);
+      await ref.read(userControllerProvider.notifier).creationUsr(context: context, name: name, email: email, password: password);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<void>>(userControllerProvider, (previous, next) {
-      next.whenOrNull(
-        data: (_) {
-          Navigator.popAndPushNamed(context, '/');
-        },
-        error: (error, _) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error.toString())),
-          );
-        },
-      );
-    });
-
     return Scaffold(
       backgroundColor: ColorsApp.background,
       body: Center(
