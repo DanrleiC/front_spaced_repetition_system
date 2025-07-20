@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:front_spaced_repetition_system/app/features/main/main.screen.dart';
 import 'package:front_spaced_repetition_system/app/features/user/screen/usr_creation.screen.dart';
 
-import '../features/homepage/screen/homepage.screen.dart';
 import '../features/login/screen/login.screen.dart';
 
 class AppRoutes {
@@ -17,7 +17,7 @@ class AppRoutes {
       case usrCreation:
         return MaterialPageRoute(builder: (_) => const UserCreationScreen());
       case homepage:
-        return MaterialPageRoute(builder: (_) => const HomePageScreen());
+        return MaterialPageRoute(builder: (_) => const MainScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(
