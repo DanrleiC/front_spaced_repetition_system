@@ -52,6 +52,7 @@ class _MenuScreenState extends ConsumerState<MenuScreen> {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const PicProfileImgWidget(),
                   const SizedBox(height: 16),
