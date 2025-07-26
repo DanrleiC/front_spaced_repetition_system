@@ -7,8 +7,8 @@ import '../features/login/screen/login.screen.dart';
 
 class AppRoutes {
   static const String initial     = '/';
-  static const String usrCreation = '/usrCreation';
   static const String homepage    = '/homepage';
+  static const String usrCreation = '/usrCreation';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
