@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:front_spaced_repetition_system/app/features/deck/screen/deck_creation.screen.dart';
 import 'package:front_spaced_repetition_system/app/features/homepage/provider/bottombar.provider.dart';
 import 'package:front_spaced_repetition_system/app/features/homepage/screen/homepage.screen.dart';
 import 'package:front_spaced_repetition_system/app/features/homepage/widgets/fab.widget.dart';
@@ -14,7 +15,6 @@ class MainScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedIndexProvider);
 
-    // Lista das telas que serão exibidas
     final List<Widget> screens = [
       const HomePageScreen(),
       const MenuScreen(),
@@ -43,7 +43,12 @@ class MainScreen extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: const CustomFloatingActionButton(),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => const DeckCreateDialog(),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
