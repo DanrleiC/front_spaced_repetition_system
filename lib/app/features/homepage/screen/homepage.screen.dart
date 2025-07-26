@@ -4,6 +4,7 @@ import 'package:front_spaced_repetition_system/app/features/homepage/controller/
 import 'package:front_spaced_repetition_system/app/features/homepage/models/deck.model.dart';
 import 'package:front_spaced_repetition_system/app/features/homepage/widgets/deck_card.widget.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
+import 'package:responsive_layout_grid/responsive_layout_grid.dart';
 
 class HomePageScreen extends ConsumerWidget {
   const HomePageScreen({super.key});
@@ -20,14 +21,16 @@ class HomePageScreen extends ConsumerWidget {
 
   Widget content(AsyncValue<List<DeckModel>> decksController) {
     return decksController.when(
-      data: (List<DeckModel> decks) => SingleChildScrollView(
+      data: (decks) => SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Wrap(
-          spacing: 16,
-          runSpacing: 16,
+        child: ResponsiveLayoutGrid(
+          minimumColumnWidth: 200,
+          columnGutterWidth: 5,
+          rowGutterHeight: 5,
+          padding: const EdgeInsets.all(0),
           children: decks.map((deck) {
-            return SizedBox(
-              width: 500,
+            return ResponsiveLayoutCell(
+              columnSpan: ColumnSpan.remainingWidth(preferred: 1),
               child: DeckCard(
                 title: deck.name,
                 description: deck.description,
