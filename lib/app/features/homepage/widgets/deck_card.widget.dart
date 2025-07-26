@@ -26,34 +26,7 @@ class DeckCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    GradientCircleIcon(
-                      assetPath: assetPath,
-                      borderRadius: 12,
-                      size: 50,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        color: ColorsApp.freedom,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Icon(
-                  FontAwesomeIcons.ellipsisVertical,
-                  color: ColorsApp.freedom,
-                )
-              ],
-            ),
-            const SizedBox(height: 8),
+              _buildSmallLayout(),
             Text(
               description,
               style: TextStyle(
@@ -64,6 +37,39 @@ class DeckCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSmallLayout() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GradientCircleIcon(
+              assetPath: assetPath,
+              borderRadius: 12,
+              size: 35,
+            ),
+            Icon(
+              FontAwesomeIcons.ellipsisVertical,
+              color: ColorsApp.freedom,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: ColorsApp.freedom,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
