@@ -51,10 +51,29 @@ class DeckCard extends StatelessWidget {
               borderRadius: 12,
               size: 35,
             ),
-            Icon(
-              FontAwesomeIcons.ellipsisVertical,
-              color: ColorsApp.freedom,
-            ),
+            PopupMenuButton<String>(
+            icon: const Icon(
+                FontAwesomeIcons.ellipsisVertical,
+                color: ColorsApp.freedom,
+              ),
+            onSelected: (String value) {
+              print(value);
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Editar',
+                child: Text('Editar'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Excluir',
+                child: Text('Excluir'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'Compartilhar',
+                child: Text('Compartilhar'),
+              ),
+            ],
+          ),
           ],
         ),
         const SizedBox(height: 8),
