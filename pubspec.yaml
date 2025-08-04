@@ -17,6 +17,7 @@ dependencies:
   image_picker: ^1.1.2
   toastification: ^3.0.3
   responsive_layout_grid: ^1.1.2
+  file_picker: ^10.2.1
   
 dev_dependencies:
   flutter_test:
