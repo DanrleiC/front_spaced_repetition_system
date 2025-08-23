@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:front_spaced_repetition_system/app/default_widgets/gradent_circle_icon.widget.dart';
-import 'package:front_spaced_repetition_system/app/features/card/screen/card.screen.dart';
+import 'package:front_spaced_repetition_system/app/features/card/screens/flash_card.screen.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
 class DeckCard extends StatelessWidget {
@@ -72,7 +72,8 @@ class DeckCard extends StatelessWidget {
               PopupMenuItem<String>(
                 value: 'addCard',
                 child: Text('Adicionar Cards'),
-                onTap: () => Navigator.push(
+                onTap: () 
+                => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const FlashcardCreatorScreen(),
