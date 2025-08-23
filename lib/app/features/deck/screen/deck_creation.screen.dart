@@ -5,7 +5,7 @@ import 'package:front_spaced_repetition_system/app/features/deck/widgets/deck_fo
 import 'package:front_spaced_repetition_system/app/features/homepage/controller/decks.controller.dart';
 import 'package:front_spaced_repetition_system/app/utils/alert_helper.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
-import 'package:toastification/toastification.dart';
+import 'package:front_spaced_repetition_system/app/utils/toast_helper.dart';
 
 class DeckCreateDialog extends ConsumerWidget {
   const DeckCreateDialog({super.key});
@@ -61,16 +61,7 @@ class DeckCreateDialog extends ConsumerWidget {
                       data: (_) {
                         ref.invalidate(decksProvider);
 
-                        toastification.show(
-                          context: context,
-                          type: ToastificationType.success,
-                          style: ToastificationStyle.minimal,
-                          title: const Text(
-                            'Deck registrado com sucesso!',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          autoCloseDuration: const Duration(seconds: 3),
-                        );
+                        ToastHelper.showSuccess(context: context, message: 'Deck registrado com sucesso!');
 
                         Navigator.of(context).pop();
                       },
