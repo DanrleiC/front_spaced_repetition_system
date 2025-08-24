@@ -32,8 +32,7 @@ class HomePageScreen extends ConsumerWidget {
             return ResponsiveLayoutCell(
               columnSpan: ColumnSpan.remainingWidth(preferred: 1),
               child: DeckCard(
-                title: deck.name,
-                description: deck.description,
+                deckModel: deck
               ),
             );
           }).toList(),
