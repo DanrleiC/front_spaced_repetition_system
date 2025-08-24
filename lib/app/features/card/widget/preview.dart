@@ -7,7 +7,7 @@ import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 class FlashcardPreviewWidget extends StatelessWidget {
   final String title;
   final String content;
-  final FlashcardMedia media;
+  final List<FlashcardMedia> media;
   final VoidCallback? onAddImage;
   final VoidCallback? onAddAudio;
   final VoidCallback? onRemoveImage;
@@ -26,6 +26,12 @@ class FlashcardPreviewWidget extends StatelessWidget {
     this.showAudioOption = false,
   });
 
+  bool get hasImage => media.any((m) => m.isImage);
+  bool get hasAudio => media.any((m) => m.isAudio);
+
+  FlashcardMedia? get imageMedia => media.firstWhere((m) => m.isImage);
+  FlashcardMedia? get audioMedia => media.firstWhere((m) => m.isAudio,);
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,8 +40,8 @@ class FlashcardPreviewWidget extends StatelessWidget {
         Text(
           title,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 8),
         Container(
@@ -84,7 +90,7 @@ class FlashcardPreviewWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                        if (media.hasImage) ...[
+                        if (hasImage && imageMedia?.path != null) ...[
                           const SizedBox(height: 8),
                           Container(
                             height: 60,
@@ -96,7 +102,7 @@ class FlashcardPreviewWidget extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.file(
-                                File(media.imagePath!),
+                                File(imageMedia!.path!),
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
@@ -108,7 +114,7 @@ class FlashcardPreviewWidget extends StatelessWidget {
                             ),
                           ),
                         ],
-                        if (media.hasAudio) ...[
+                        if (hasAudio && audioMedia?.path != null) ...[
                           const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.all(8),
@@ -145,7 +151,7 @@ class FlashcardPreviewWidget extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            if (media.hasImage)
+            if (hasImage)
               _buildActionChip(
                 label: 'Remover Imagem',
                 icon: Icons.delete,
@@ -160,7 +166,7 @@ class FlashcardPreviewWidget extends StatelessWidget {
                 color: Colors.blue,
               ),
             if (showAudioOption) ...[
-              if (media.hasAudio)
+              if (hasAudio)
                 _buildActionChip(
                   label: 'Remover Áudio',
                   icon: Icons.delete,
