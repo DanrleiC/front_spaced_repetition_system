@@ -91,6 +91,13 @@ class FlashcardDeckNotifier extends StateNotifier<FlashcardDeck> {
       updatedAt: DateTime.now(),
     );
   }
+
+  void setCards(List<Flashcard> newCards) {
+    state = state.copyWith(
+      cards: newCards,
+      updatedAt: DateTime.now(),
+    );
+  }
 }
 
 class FlashcardFormNotifier extends StateNotifier<FlashcardFormState> {
