@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:front_spaced_repetition_system/app/features/card/models/flash_card.dart';
 import 'package:front_spaced_repetition_system/app/features/card/models/flash_card_deck.dart';
 import 'package:front_spaced_repetition_system/app/features/card/models/flash_card_form.dart';
+import 'package:front_spaced_repetition_system/app/features/card/models/flash_card_midia.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -111,10 +114,12 @@ class FlashcardFormNotifier extends StateNotifier<FlashcardFormState> {
         maxHeight: 1024,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
-        final updatedMedia = state.frontMedia.copyWith(imagePath: image.path);
-        state = state.copyWith(frontMedia: updatedMedia);
+        final file = File(image.path);
+        final newMedia = FlashcardMedia.fromFile(file, 'image/png');
+        
+        state = state.copyWith(frontMedia: [newMedia]);
       }
     } catch (e) {
       rethrow;
@@ -129,10 +134,11 @@ class FlashcardFormNotifier extends StateNotifier<FlashcardFormState> {
         maxHeight: 1024,
         imageQuality: 85,
       );
-      
+
       if (image != null) {
-        final updatedMedia = state.backMedia.copyWith(imagePath: image.path);
-        state = state.copyWith(backMedia: updatedMedia);
+        final file = File(image.path);
+        final newMedia = FlashcardMedia.fromFile(file, 'image/png');
+        state = state.copyWith(backMedia: [newMedia]);
       }
     } catch (e) {
       rethrow;
@@ -147,8 +153,11 @@ class FlashcardFormNotifier extends StateNotifier<FlashcardFormState> {
       );
 
       if (result != null && result.files.single.path != null) {
-        final updatedMedia = state.backMedia.copyWith(audioPath: result.files.single.path);
-        state = state.copyWith(backMedia: updatedMedia);
+        final newMedia = FlashcardMedia(
+          path: result.files.single.path,
+          contentType: 'audio/mpeg'
+        );
+        state = state.copyWith(backMedia: [newMedia]);
       }
     } catch (e) {
       rethrow;
@@ -156,18 +165,17 @@ class FlashcardFormNotifier extends StateNotifier<FlashcardFormState> {
   }
 
   void removeFrontImage() {
-    final updatedMedia = state.frontMedia.copyWith(imagePath: '');
-    state = state.copyWith(frontMedia: updatedMedia);
+    state = state.copyWith(frontMedia: []);
   }
 
   void removeBackImage() {
-    final updatedMedia = state.backMedia.copyWith(imagePath: '');
-    state = state.copyWith(backMedia: updatedMedia);
+    final updatedList = state.backMedia.where((media) => !media.isImage).toList();
+    state = state.copyWith(backMedia: updatedList);
   }
 
   void removeBackAudio() {
-    final updatedMedia = state.backMedia.copyWith(audioPath: '');
-    state = state.copyWith(backMedia: updatedMedia);
+    final updatedList = state.backMedia.where((media) => !media.isAudio).toList();
+    state = state.copyWith(backMedia: updatedList);
   }
 
   void loadCardForEditing(Flashcard card) {
@@ -187,6 +195,7 @@ class FlashcardFormNotifier extends StateNotifier<FlashcardFormState> {
   Flashcard createCard() {
     return Flashcard(
       id: state.editingCardId ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      deckId: '',
       question: state.question.trim(),
       answer: state.answer.trim(),
       frontMedia: state.frontMedia,
@@ -195,8 +204,3 @@ class FlashcardFormNotifier extends StateNotifier<FlashcardFormState> {
     );
   }
 }
-
-// Providers
-final flashcardDeckProvider = StateNotifierProvider<FlashcardDeckNotifier, FlashcardDeck>((ref) => FlashcardDeckNotifier());
-
-final flashcardFormProvider = StateNotifierProvider<FlashcardFormNotifier, FlashcardFormState>((ref) => FlashcardFormNotifier());
