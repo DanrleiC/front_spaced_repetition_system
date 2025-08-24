@@ -4,8 +4,9 @@ import 'package:front_spaced_repetition_system/app/default_widgets/custom_textfi
 import 'package:front_spaced_repetition_system/app/features/card/models/flash_card.dart';
 import 'package:front_spaced_repetition_system/app/features/card/models/flash_card_deck.dart';
 import 'package:front_spaced_repetition_system/app/features/card/models/flash_card_form.dart';
-import 'package:front_spaced_repetition_system/app/features/card/providers/flash_card.dart';
+import 'package:front_spaced_repetition_system/app/features/card/providers/flash_card.api.dart';
 import 'package:front_spaced_repetition_system/app/features/card/widget/preview.dart';
+import 'package:front_spaced_repetition_system/app/features/homepage/models/deck.model.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
 class FlashcardCreatorScreen extends ConsumerStatefulWidget {
@@ -21,6 +22,23 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
   final _deckDescriptionController = TextEditingController();
   final _questionController = TextEditingController();
   final _answerController = TextEditingController();
+
+  DeckModel? _receivedDeckModel;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_receivedDeckModel == null) {
+      final DeckModel? deckModel = ModalRoute.of(context)?.settings.arguments as DeckModel?;
+
+      if (deckModel != null) {
+        _receivedDeckModel = deckModel;
+        _deckNameController.text = deckModel.name;
+        _deckDescriptionController.text = deckModel.description;
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -64,6 +82,7 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: ColorsApp.cardBackgound,
         title: const Text('Excluir Card'),
         content: const Text('Tem certeza que deseja excluir este card?'),
         actions: [
@@ -179,21 +198,16 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
             ),
             const SizedBox(height: 16),
             CustomTextField(
+              readOnly: true,
+              label: 'Nome do Deck',
               controller: _deckNameController,
-              label: 'Nome do Deck *',
               prefixIcon: Icon(Icons.title, color: ColorsApp.labelField),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Nome é obrigatório';
-                }
-                return null;
-              },
             ), 
             const SizedBox(height: 16),
             CustomTextField(
-              controller: _deckDescriptionController,
+              readOnly: true,
               label: 'Descrição',
-              maxLines: 3,
+              controller: _deckDescriptionController,
               prefixIcon: Icon(Icons.description, color: ColorsApp.labelField)
             ),
             const SizedBox(height: 16),
@@ -403,8 +417,8 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
                   icon: const Icon(Icons.check_circle),
                   label: const Text('Finalizar Deck'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple.shade600,
-                    foregroundColor: Colors.white,
+                    backgroundColor: ColorsApp.mainPurple,
+                    foregroundColor: ColorsApp.freedom,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
@@ -444,7 +458,7 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
         subtitle: Wrap(
           spacing: 4,
           children: [
-            if (card.frontMedia.hasImage)
+            if (card.frontMedia.any((m) => m.isImage))
               Chip(
                 label: const Text('Img F'),
                 backgroundColor: Colors.blue.shade50,
@@ -453,7 +467,7 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
                   fontSize: 10,
                 ),
               ),
-            if (card.backMedia.hasImage)
+            if (card.backMedia.any((m) => m.isImage))
               Chip(
                 label: const Text('Img T'),
                 backgroundColor: Colors.green.shade50,
@@ -462,7 +476,7 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
                   fontSize: 10,
                 ),
               ),
-            if (card.backMedia.hasAudio)
+            if (card.backMedia.any((m) => m.isAudio))
               Chip(
                 label: const Text('Audio'),
                 backgroundColor: Colors.orange.shade50,
