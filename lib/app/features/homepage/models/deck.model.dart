@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 class DeckModel {
-
   final String id;
   final String name;
   final String description;
@@ -11,7 +10,14 @@ class DeckModel {
     required this.name,
     required this.description,
   });
-  
+
+  factory DeckModel.empty() {
+    return DeckModel(
+      id: '',
+      name: '',
+      description: '',
+    );
+  }
 
   DeckModel copyWith({
     String? id,
@@ -43,5 +49,6 @@ class DeckModel {
 
   String toJson() => json.encode(toMap());
 
-  factory DeckModel.fromJson(String source) => DeckModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory DeckModel.fromJson(String source) =>
+      DeckModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }
