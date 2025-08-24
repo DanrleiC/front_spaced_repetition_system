@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final TextInputType keyboardType;
   final bool obscureText;
+  final bool readOnly;
   final int maxLines;
   final Widget? prefixIcon;
 
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.readOnly = false,
     this.maxLines = 1,
   });
 
@@ -29,6 +31,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      readOnly: readOnly,
       keyboardType: keyboardType,
       obscureText: obscureText,
       maxLines: maxLines,
