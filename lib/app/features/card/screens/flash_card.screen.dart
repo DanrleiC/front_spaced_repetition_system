@@ -36,8 +36,18 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
         _receivedDeckModel = deckModel;
         _deckNameController.text = deckModel.name;
         _deckDescriptionController.text = deckModel.description;
+
+        _loadFlashcards(deckModel.id);
       }
     }
+  }
+
+  void _loadFlashcards(String deckId) async {
+    final flashcardDeckNotifier = ref.read(flashcardDeckProvider.notifier);
+    
+    final asyncCards = await ref.read(flashcardsProvider(deckId).future);
+    
+    flashcardDeckNotifier.setCards(asyncCards);
   }
 
   @override
@@ -334,6 +344,8 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
   }
 
   Widget _buildCardListSection(FlashcardDeck deck) {
+    final asyncState = ref.watch(flashcardsProvider(_receivedDeckModel!.id));
+
     return Card(
       color: ColorsApp.cardBackgound,
       child: Padding(
@@ -347,15 +359,15 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
                 Text(
                   'Cards Criados',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 if (deck.isNotEmpty)
                   Chip(
                     label: Text(
                       '${deck.cardCount} cards',
                       style: TextStyle(
-                        color: ColorsApp.labelField
+                        color: ColorsApp.labelField,
                       ),
                     ),
                     backgroundColor: ColorsApp.cardBackgound,
@@ -363,51 +375,76 @@ class _FlashcardCreatorScreenState extends ConsumerState<FlashcardCreatorScreen>
               ],
             ),
             const SizedBox(height: 16),
-            if (deck.isEmpty)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: ColorsApp.fieldBackground,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: ColorsApp.borderField),
+            
+            asyncState.when(
+              loading: () => const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: CircularProgressIndicator(),
                 ),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.style_outlined,
-                      size: 48,
-                      color: ColorsApp.labelField,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Nenhum card criado ainda',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: ColorsApp.labelField,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Crie seu primeiro card preenchendo os campos acima',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: ColorsApp.labelField,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              )
-            else
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: deck.cards.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  final card = deck.cards[index];
-                  return _buildCardListItem(card, index, deck.cards.length);
-                },
               ),
+              error: (error, stack) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Erro ao carregar cards: $error',
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              data: (_) {
+                
+                if (deck.isEmpty) {
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color: ColorsApp.fieldBackground,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: ColorsApp.borderField),
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.style_outlined,
+                          size: 48,
+                          color: ColorsApp.labelField,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Nenhum card criado ainda',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                color: ColorsApp.labelField,
+                              ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Crie seu primeiro card preenchendo os campos acima',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: ColorsApp.labelField,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: deck.cards.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final card = deck.cards[index];
+                      return _buildCardListItem(card, index, deck.cards.length);
+                    },
+                  );
+                }
+              },
+            ),
+            
             if (deck.isNotEmpty) ...[
               const SizedBox(height: 16),
               SizedBox(
