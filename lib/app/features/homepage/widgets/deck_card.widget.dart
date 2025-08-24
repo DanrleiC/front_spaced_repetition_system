@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:front_spaced_repetition_system/app/default_widgets/gradent_circle_icon.widget.dart';
-import 'package:front_spaced_repetition_system/app/features/card/screens/flash_card.screen.dart';
+import 'package:front_spaced_repetition_system/app/features/homepage/models/deck.model.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
+import 'package:front_spaced_repetition_system/app/utils/routes.dart';
 
 class DeckCard extends StatelessWidget {
-  final String title;
-  final String description;
+  final DeckModel deckModel;
   final String assetPath;
 
   const DeckCard({
     super.key,
-    required this.title,
-    required this.description,
+    required this.deckModel,
     this.assetPath = 'assets/cards.png',
   });
 
@@ -27,9 +26,9 @@ class DeckCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-              _buildSmallLayout(),
+              _buildSmallLayout(context),
             Text(
-              description,
+              deckModel.description,
               style: TextStyle(
                 color: ColorsApp.labelField,
                 fontSize: 16,
@@ -41,7 +40,7 @@ class DeckCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSmallLayout() {
+  Widget _buildSmallLayout(BuildContext ctx) {
     return Column(
       children: [
         Row(
@@ -53,42 +52,42 @@ class DeckCard extends StatelessWidget {
               size: 35,
             ),
             PopupMenuButton<String>(
-            icon: const Icon(
+              icon: const Icon(
                 FontAwesomeIcons.ellipsisVertical,
                 color: ColorsApp.freedom,
               ),
-            onSelected: (String value) {
-              print(value);
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
-                value: 'Editar',
-                child: Text('Editar'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'Excluir',
-                child: Text('Excluir'),
-              ),
-              PopupMenuItem<String>(
-                value: 'addCard',
-                child: Text('Adicionar Cards'),
-                onTap: () 
-                => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FlashcardCreatorScreen(),
-                  ),
-                )
-              ),
-            ],
-          ),
+              onSelected: (String value) {
+                if (value == 'addCard') {
+                  Navigator.pushNamed(
+                    ctx,
+                    AppRoutes.cardsCreation,
+                    arguments: deckModel,
+                  );
+                }
+                debugPrint(value);
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'Editar',
+                  child: Text('Editar'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Excluir',
+                  child: Text('Excluir'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'addCard',
+                  child: Text('Adicionar Cards'),
+                ),
+              ],
+            ),
           ],
         ),
         const SizedBox(height: 8),
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            title,
+            deckModel.name,
             style: TextStyle(
               color: ColorsApp.freedom,
               fontSize: 18,
