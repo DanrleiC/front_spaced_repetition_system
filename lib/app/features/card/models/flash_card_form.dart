@@ -3,23 +3,23 @@ import 'package:front_spaced_repetition_system/app/features/card/models/flash_ca
 class FlashcardFormState {
   final String question;
   final String answer;
-  final FlashcardMedia frontMedia;
-  final FlashcardMedia backMedia;
+  final List<FlashcardMedia> frontMedia;
+  final List<FlashcardMedia> backMedia;
   final String? editingCardId;
 
   const FlashcardFormState({
     this.question = '',
     this.answer = '',
-    this.frontMedia = const FlashcardMedia(),
-    this.backMedia = const FlashcardMedia(),
+    this.frontMedia = const [],
+    this.backMedia = const [],
     this.editingCardId,
   });
 
   FlashcardFormState copyWith({
     String? question,
     String? answer,
-    FlashcardMedia? frontMedia,
-    FlashcardMedia? backMedia,
+    List<FlashcardMedia>? frontMedia,
+    List<FlashcardMedia>? backMedia,
     String? editingCardId,
   }) {
     return FlashcardFormState(
