@@ -1,23 +1,50 @@
+import 'dart:io';
+
 class FlashcardMedia {
-  final String? imagePath;
-  final String? audioPath;
+  final String? path;
+  final String? gridFsId;
+  final String? contentType;
 
   const FlashcardMedia({
-    this.imagePath,
-    this.audioPath,
+    this.path,
+    this.gridFsId,
+    this.contentType,
   });
 
-  FlashcardMedia copyWith({
-    String? imagePath,
-    String? audioPath,
-  }) {
+  factory FlashcardMedia.fromJson(Map<String, dynamic> json) {
+    if (json.isEmpty) {
+      return const FlashcardMedia();
+    }
     return FlashcardMedia(
-      imagePath: imagePath ?? this.imagePath,
-      audioPath: audioPath ?? this.audioPath,
+      gridFsId: json['gridFsId'],
+      contentType: json['contentType'],
     );
   }
 
-  bool get hasImage => imagePath != null && imagePath!.isNotEmpty;
-  bool get hasAudio => audioPath != null && audioPath!.isNotEmpty;
-  bool get hasMedia => hasImage || hasAudio;
+  factory FlashcardMedia.fromFile(File file, String contentType) {
+    return FlashcardMedia(
+      path: file.path,
+      contentType: contentType,
+    );
+  }
+
+  FlashcardMedia copyWith({
+    String? path,
+    String? gridFsId,
+    String? contentType,
+  }) {
+    return FlashcardMedia(
+      path: path ?? this.path,
+      gridFsId: gridFsId ?? this.gridFsId,
+      contentType: contentType ?? this.contentType,
+    );
+  }
+
+  bool get hasMedia => path != null || gridFsId != null;
+
+  bool get isImage => contentType?.startsWith('image/') ?? false;
+
+  bool get isVideo => contentType?.startsWith('video/') ?? false;
+
+  bool get isAudio => contentType?.startsWith('audio/') ?? false;
 }
