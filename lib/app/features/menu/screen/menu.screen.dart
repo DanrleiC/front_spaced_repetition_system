@@ -9,8 +9,6 @@ import 'package:front_spaced_repetition_system/app/features/menu/widgets/menu_se
 import 'package:front_spaced_repetition_system/app/features/menu/widgets/modal_edit_profile.dart';
 import 'package:front_spaced_repetition_system/app/features/menu/widgets/pic_profile_img.widget.dart';
 import 'package:front_spaced_repetition_system/app/features/menu/widgets/username.dart';
-import 'package:front_spaced_repetition_system/app/features/user/controller/user.controller.dart';
-import 'package:front_spaced_repetition_system/app/repository/provider/api_service.provider.dart';
 import 'package:front_spaced_repetition_system/app/utils/colors_app.dart';
 
 class MenuScreen extends ConsumerStatefulWidget {
